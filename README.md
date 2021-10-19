@@ -47,7 +47,7 @@ Implementing a fancy UI using (and improving) provided design
 ### **Required Technologies**
 - React
 - Redux
-- Typescript
+- type-checking libraries such as Typescript, Flow, Prop-Types
 - Unit Test (Jest etc...)
 
 # Getting Started
