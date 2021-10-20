@@ -22,7 +22,7 @@ The Goal is to implement a game with two independent units – the players – c
 ​
 When a player starts, they incept a random (whole) number and send it to the second player as an approach of starting the game. The receiving player can then choose between adding one of {-1,0,1} in order to get to a number that is divisible by 3. The resulting whole number is then sent back to the original sender.
 ​
-The same rules are applied until one player reaches the number 1 (after the division. See example below.) https://invis.io/JHN2247E9MK
+The same rules are applied until one player reaches the number 1 (after the division. See example below.) https://www.figma.com/file/F914dSnSz01H1D1EY64ZXO/Game_of_three?node-id=0%3A1
 ​
 Also feel free to use the provided design screens and assets.
 
@@ -43,6 +43,7 @@ Both players should be able to play automatically without user input. One of the
 ### Extras
 ​
 Implementing a fancy UI using (and improving) provided design
+[Design](https://www.figma.com/file/F914dSnSz01H1D1EY64ZXO/Game_of_three?node-id=0%3A1)
 
 ### **Required Technologies**
 - React
