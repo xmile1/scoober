@@ -107,32 +107,39 @@ io.on("connection", (socket) => {
         }
       };
 
-      const lastHumanResult = calculationResult(numbers, number);
+      const lastResult = calculationResult(numbers, number);
 
       // When the second oponnent is a CPU
       if (result?.data?.roomType === "cpu") {
         // After clients selection it will wait 2 seconds for the CPU selection
+
         setTimeout(() => {
           const setOfRandomNumbers = [1, 0, -1];
           const randomCPU =
             setOfRandomNumbers[
               Math.floor(Math.random() * setOfRandomNumbers.length)
             ];
-          const numbersa = [randomCPU, lastHumanResult];
-          const CPUResult = calculationResult(numbersa, lastHumanResult);
-
+          const combinedNumbers = [randomCPU, lastResult];
+          const CPUResult = calculationResult(combinedNumbers, lastResult);
           io.to(result?.data.room).emit("randomNumber", {
-            number: calculationResult(numbersa, lastHumanResult),
+            number: calculationResult(combinedNumbers, lastResult),
             isFirst: false,
             user: "CPU",
             selectedNumber: randomCPU,
-            isCorrectResult: CPUResult == lastHumanResult ? false : true,
+            isCorrectResult: CPUResult == lastResult ? false : true,
           });
 
           io.to(result?.data.room).emit("activateYourTurn", {
             user: socket.id,
             state: GameState.PLAY,
           });
+
+          if (calculationResult(combinedNumbers, lastResult) === 1) {
+            io.to(result?.data.room).emit("gameOver", {
+              user: "CPU",
+              isOver: true,
+            });
+          }
         }, 2000);
       }
       io.to(result?.data.room).emit("randomNumber", {
