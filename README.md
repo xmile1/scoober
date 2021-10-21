@@ -10,7 +10,7 @@
 
 
 # Introduction
-This is the server part of the challenge which can be optionally use by the candidate to complete the frontend technical challenge. This is using socket.io to serve the communication between clients. Clients can subscribe to different events to complete the requirements.
+This is the server part of the challenge that can be optionally used by the candidate to complete the frontend technical challenge. It is using socket.io to serve the communication between clients. Clients can subscribe to different events to complete the requirements.
 ​
 ## Technical Challenge
 ​
@@ -24,7 +24,7 @@ When a player starts, they incept a random (whole) number and send it to the sec
 ​
 The same rules are applied until one player reaches the number 1 (after the division. See example below.) https://www.figma.com/file/F914dSnSz01H1D1EY64ZXO/Game_of_three?node-id=0%3A1
 ​
-Also feel free to use the provided design screens and assets.
+Also, feel free to use the provided design screens and assets.
 
 For each "move", a sufficient output should be generated (mandatory: the added, and the resulting number).
 ​
@@ -35,10 +35,10 @@ Both players should be able to play automatically without user input. One of the
 - Each player has to be ​logged in before they start to play 
 - Games should be playable under rooms, as default we are provided the rooms ( two rooms againts CPU and one ) please look at: **fakeDb/fake.json** or [API Docu](https://documenter.getpostman.com/view/17986533/UV5XhxLB)
 - Each player runs on its own (independent programs, two browsers, web‐workers or a choice of your own).
-- Communication via an API (REST, Sockets).
-- A player may not be available when the other one starts.
-- Try to be platform independent, in other words the project must be runnable easily in every environment.
-- Please share your project on GitHub and send us the link.
+- Communication via an API (REST, Sockets)
+- A player may not be available when the other one starts
+- Try to be platform independent, in other words the project must be runnable easily in every environment
+- Please share your project on GitHub and send us the link
 ​
 ### Extras
 ​
@@ -49,25 +49,26 @@ Implementing a fancy UI using (and improving) provided design
 - React
 - Redux
 - type-checking libraries such as Typescript, Flow, Prop-Types
-- Unit Test (Jest etc...)
+- Unit Tests (Jest etc...)
 
 # Getting Started
 
-First clone the repository in your local, you have two different option for starting the application first is with **Docker** and the second is for **NON Docker Users** you can choose one of them.
+First clone the repository in your local machine. You have two different options for starting the application: first is via **Docker** and the second is for **NON Docker Users**.
 
 ### **Docker Desktop Users**
- - `docker-compose up --build`
+Simply run `docker-compose up --build`
 
 ### **Non Docker Users**
- in your root directory where the repository is cloned 
+In your root folder where the repository is cloned, run the following commands:
  - `cd ./wss`
  - `npm install`
- - starting the fake DB JsonServer: `npm run start:server` 
- - open a new terminal and type: `npm run start` this will established the socket connection
+ - Starting the fake DB JsonServer: `npm run start:server` 
+ - Open a new terminal and type: `npm run start`. This will establish the socket connection
 
 
 # Available Socket Events
- Below you will find a list from available events, might be usefull during your development, 
+Below you will find a list of available events, that might be useful during your development.
+
 ## Broadcast Events from Server => Client
  -  **`randomNumber`**
  -  **`activateYourTurn`**
@@ -81,37 +82,34 @@ First clone the repository in your local, you have two different option for star
 - **`connection`**
 - **`login`**
 - **`joinRoom`**
--  **`sendNumber`**
--  **`leaveRoom`**
--  **`letsPlay`**
+- **`sendNumber`**
+- **`leaveRoom`**
+- **`letsPlay`**
 
 ### **connection**
- when the connection is established with socket on client side
+When the connection is established via socket on client side.
 
 ### **login**
-when the user is logged in to the game, it creates a user data on fakeDB and broadcast a `message` event after promise is resolved
+When the user is logged in the game, it creates a user data on fakeDB and broadcasts a `message` event after the promise is resolved.
 
 ### **joinRoom**
-when the user join the room via client side
-it assing the client to the room, broadcast a `message` event after the promise is resolved. and it lets the user join the room and broadcast an `onReady` event. If the room type is CPU the `maxRoomSize` is 1 otherwise it will be waiting for the second opponent
+When the user join the room via client side.
+It assings the client to the room, broadcasts a `message` event after the promise is resolved, and it lets the user join the room and broadcast an `onReady` event. If the room type is CPU, the `maxRoomSize` is 1. Otherwise, it will be waiting for the second opponent.
 
 ### **letsPlay**
-after the event is fired from the client-side it sends a request to fakeDb to get the userDetail,after success result it broadcast the  `randomNumber` event to the room which will visible for all opponents, and it broadcast `activateYourTurn` and the first connected use starts to play
+After the event is fired from the client-side, it sends a request to fakeDb to get the user details. After success, it broadcasts the `randomNumber` event to the room, that will be visible for all opponents. Finally, it broadcasts `activateYourTurn` and the first connected user starts to play.
 
 ### **sendNumber**
-it sends the number back from the client with selected one of the numbers ( 1,0,-1), it broadcast `randomNumber` event with the calculated result back and activate the opponents turn with the `activateYourTurn` event, for CPU users this section is automated please look at the **code line 113**
-
+It sends the number back to the client with the selected move choice ( 1,0,-1). It broadcasts the `randomNumber` event with the calculated result back and activates the opponent turn with the `activateYourTurn` event. For CPU users this section is automated, please look at the **code line 113**.
 
 # Fake DB JsonServer
-It's server which creates full fake REST API for more detail
+It's a server which creates a fake REST API. For more details, please check
 
 [JSON Server Document](https://github.com/typicode/json-server)
-as default we are set three rooms
+
+By default we are set three rooms,
 please check the `./fakeDb/fake.json` file
 
 **Some Helpful API Methods**
 
-[API DOCUMENT](https://documenter.getpostman.com/view/17986533/UV5XhxLB)
-
-
-
+[API DOCUMENTATION](https://documenter.getpostman.com/view/17986533/UV5XhxLB)
