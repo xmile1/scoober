@@ -28,7 +28,7 @@ Also, feel free to use the provided design screens and assets.
 
 For each "move", a sufficient output should be generated (mandatory: the added, and the resulting number).
 ​
-Both players should be able to play automatically without user input. One of the players should optionally be adjustable by a user.
+Players  should be also able to play individually  against the CPU 
 ​
 ### Notes & Requirements
 ​
@@ -56,7 +56,9 @@ Implementing a fancy UI using (and improving) provided design
 First clone the repository in your local machine. You have two different options for starting the application: first is via **Docker** and the second is for **NON Docker Users**.
 
 ### **Docker Desktop Users**
-Simply run `docker-compose up --build`
+
+ - Rename `.env.example` to `.env` 
+ - Simply run `docker-compose up --build`
 
 ### **Non Docker Users**
 In your root folder where the repository is cloned, run the following commands:

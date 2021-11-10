@@ -3,7 +3,7 @@ services:
   json-server:
     image: vimagick/json-server
     container_name: "json-server"
-    env_file: local_mock.env
+    env_file: .env
     command: -H 0.0.0.0 -p ${HOST_PORT} -w /fakeDb/fake.json
     ports:
       - "${HOST_PORT}:${HOST_PORT}"
@@ -13,7 +13,7 @@ services:
   wss:
     build: wss
     container_name: "socket"
-    env_file: local_mock.env
+    env_file: .env
     environment:
       - HOST_LOCAL=json-server
     ports:
