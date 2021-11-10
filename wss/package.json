@@ -8,7 +8,7 @@
     "tsc": "tsc",
     "start:server": "npx json-server --port 3004 --watch ../fakeDb/fake.json",
     "start": "npm run prod",
-    "prod": "npm run clean && tsc && node -r dotenv/config ./build/index.js dotenv_config_path=../local_mock.env",
+    "prod": "npm run clean && tsc && node -r dotenv/config ./build/index.js dotenv_config_path=../.env",
     "prod:docker": "npm run clean && tsc && node ./build/index.js"
   },
   "dependencies": {
