@@ -62,10 +62,12 @@ First clone the repository in your local machine. You have two different options
 
 ### **Non Docker Users**
 In your root folder where the repository is cloned, run the following commands:
+ - Rename `.env.example` to `.env` 
+ - **CAUTION! please be sure that you start the npm commands inside `./wss/` folder**
  - `cd ./wss`
  - `npm install`
  - Starting the fake DB JsonServer: `npm run start:server` 
- - Open a new terminal and type: `npm run start`. This will establish the socket connection
+ - Open a new terminal and type: `npm run start`. This will establish the socket connection 
 
 
 # Available Socket Events
