@@ -8,7 +8,10 @@
 
   /* Theme Colors */
   --color-primary: #1574F5;
+  --color-primary-dark: #0A3847;
   --color-text: #0A3847;
+  --color-alternative-text: #ffffff;
+  --color-brand-dark: #FF8000;
 }
 
 
