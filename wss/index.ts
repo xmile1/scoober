@@ -31,7 +31,30 @@ io.on("connection", (socket) => {
   });
 
   /* Join to the room */
-  socket.on("joinRoom", ({ username, room, roomType }) => {
+  socket.on("joinRoom", async ({ username, room, roomType }) => {
+    const maxRoomSize = roomType === "cpu" ? 1 : 2;
+
+    const _room = io.sockets.adapter.rooms[room];
+    if (_room?.length === maxRoomSize) {
+      socket.emit("message", { message: "Room is full" });
+      return;
+    }
+
+    try {
+      const result = await apiService.getUserDetail(socket.id);
+      const currentRoom = result?.data.room;
+      if (currentRoom) {
+        socket.leave(currentRoom);
+        socket.to(currentRoom).emit("message", {
+          user: username,
+          message: `${username} has left the room.`,
+          room: currentRoom,
+        });
+      }
+    } catch (err) {
+      socket.emit("error", { message: err });
+    }
+
     apiService
       .assignRoom(room, socket.id, roomType)
       .then(() => {
@@ -49,13 +72,40 @@ io.on("connection", (socket) => {
         }
 
         /* Check the room with how many socket is connected */
-        const maxRoomSize = roomType === "cpu" ? 1 : 2;
         socket.join(room, () => {
           if (
             io.nsps["/"].adapter.rooms[room] &&
             io.nsps["/"].adapter.rooms[room]?.length === maxRoomSize
           ) {
-            io.to(room).emit("onReady", { state: true });
+
+            const players = Object.keys(io.sockets.adapter.rooms[room]?.sockets ?? {});
+
+            if (roomType === "cpu") {
+              players.forEach(playerSocketId => {
+                io.to(playerSocketId).emit("opponentName", {
+                  opponentName: "AI",
+                });
+              });
+            } else {
+              Promise.all(players.map(playerSocketId => apiService.getUserDetail(playerSocketId)))
+                .then(playerDetails => {
+                  playerDetails.forEach((player, index) => {
+                    const opponent = playerDetails[(index + 1) % playerDetails.length];
+                    io.to(player?.data.id).emit("opponentName", {
+                      opponentName: opponent?.data.name,
+                    });
+                  });
+                });
+            }
+
+            io.to(room).emit("onReady", {
+              state: true,
+              userId: Object.keys(
+                io.sockets.adapter.rooms[room]?.sockets ?? {}
+              )[0],
+            });
+
+
           }
         });
       })
@@ -74,12 +124,8 @@ io.on("connection", (socket) => {
           isFirst: true,
         });
 
-        socket.broadcast.emit("activateYourTurn", {
-          user: io.nsps["/"].adapter.rooms[result?.data.room]
-            ? Object.keys(
-                io.nsps["/"].adapter.rooms[result?.data.room].sockets
-              )[0]
-            : null,
+        io.to(result?.data.room).emit("activateYourTurn", {
+          user: Object.keys(io.sockets.adapter.rooms[result?.data.room]?.sockets ?? {})[0] || null,
           state: GameState.PLAY,
         });
       })
@@ -117,7 +163,7 @@ io.on("connection", (socket) => {
           const setOfRandomNumbers = [1, 0, -1];
           const randomCPU =
             setOfRandomNumbers[
-              Math.floor(Math.random() * setOfRandomNumbers.length)
+            Math.floor(Math.random() * setOfRandomNumbers.length)
             ];
           const combinedNumbers = [randomCPU, lastResult];
           const CPUResult = calculationResult(combinedNumbers, lastResult);
