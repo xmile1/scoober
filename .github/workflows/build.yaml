@@ -2,7 +2,7 @@ name: Build and Pack
 on:
   pull_request:
     branches:
-      - master
+      - main
 jobs:
   build_and_push:
     runs-on: ubuntu-latest
