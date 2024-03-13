@@ -6,11 +6,14 @@ import { useCallback, useEffect, useState } from "react";
 import { GameOver } from "@/modules/GameOver";
 import { RoomsWrapper } from "./Rooms.styles";
 import { useEffect, useState } from "react";
-import { Room } from "@/common/models/room";
+import { HistoryItem, Room } from "@/common/models/room";
 
 export const Rooms = () => {
   const [rooms, setRooms] = useState<Room[]>([]);
   const [username, setUsername] = useState<string>("");
+  const [myTurn, setMyTurn] = useState<boolean>(false);
+  const [history, setHistory] = useState<HistoryItem[]>([]);
+  const [firstNumber, setFirstNumber] = useState<number>(0);
   const [currentRoom, setCurrentRoom] = useState<Room>();
 
   useEffect(() => {
@@ -45,11 +48,20 @@ export const Rooms = () => {
     [username]
   );
 
+  const startGame = useCallback(
+    (room?: Room) => {
+      setHistory([]);
+      setFirstNumber(0);
+      setMyTurn(false);
+      joinRoom(room ?? (currentRoom as Room));
+    },
+    [currentRoom, joinRoom]
+  );
 
   return (
     <Page>
       <RoomsWrapper>
-        <RoomChooser rooms={rooms} currentRoom={currentRoom} onRoomClick={joinRoom} />
+        <RoomChooser rooms={rooms} currentRoom={currentRoom} onRoomClick={startGame} />
       </RoomsWrapper>
     </Page>
   );

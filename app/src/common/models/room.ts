@@ -5,3 +5,11 @@ export interface Room {
   owner: string;
 }
 
+export interface HistoryItem {
+  selectedNumber: number;
+  number: number;
+  result: number;
+  user: string;
+  id: string;
+}
+
