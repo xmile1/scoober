@@ -13,11 +13,23 @@
       "type": "cpu"
     },
     {
-      "id": "aa0c86fa",
+      "id": "bae8w4f3",
       "name": "Room Amsterdam",
       "owner": "lqcflVIEANZWYkmAAADD",
       "type": "human"
+    },
+    {
+      "id": "e3e3e3e3",
+      "name": "Room Xmile",
+      "owner": "lqcflVIEANyswkmAAAuu",
+      "type": "human"
     }
   ],
-  "users": []
+  "users": [
+    {
+      "id": "-dz-AR_mtd1vB8S-AABT",
+      "name": "guest20243",
+      "room": ""
+    }
+  ]
 }
