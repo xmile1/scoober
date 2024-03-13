@@ -1,7 +1,9 @@
 import "./reset.css";
+import "./theme.css";
+import { Rooms } from "@/pages/Rooms/Rooms";
 
 function App() {
-  return <div>Lass uns anfangen</div>
+  return <Rooms />;
 }
 
-export default App
+export default App;

@@ -9,9 +9,19 @@
   /* Theme Colors */
   --color-primary: #1574F5;
   --color-primary-dark: #0A3847;
+  --color-secondary: #6c757d;
+  --color-background: #ffffff;
+  --color-background-secondary: #F8F5F2;
+  --color-selected-answer: #205A6D;
   --color-text: #0A3847;
+  --color-secondary-text: #205A6D;
   --color-alternative-text: #ffffff;
   --color-brand-dark: #FF8000;
+  --color-header-footer-background: #0A3847;
+  --color-button: #ffffff;
+  --color-button-text: #1574F5;
+  --color-button-active: #1574F5;
+  --color-button-active-text: #ffffff;
 }
 
 
