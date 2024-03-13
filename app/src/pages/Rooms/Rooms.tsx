@@ -2,10 +2,10 @@ import { Page } from "@/common/components";
 import { getRooms } from "@/common/services/api/rooms";
 import { socket } from "@/common/services/api/socket";
 import { RoomChooser } from "@/modules/RoomChooser";
+import { GameRoom } from "@/modules/GameRoom";
 import { useCallback, useEffect, useState } from "react";
-import { GameOver } from "@/modules/GameOver";
-import { RoomsWrapper } from "./Rooms.styles";
-import { useEffect, useState } from "react";
+import { useSocketEvent } from "@/common/hooks";
+import { GameRoomWrapper, RoomsWrapper } from "./Rooms.styles";
 import { HistoryItem, Room } from "@/common/models/room";
 
 export const Rooms = () => {
@@ -41,6 +41,40 @@ export const Rooms = () => {
     login();
   }, []);
 
+  const onRandomNumber = useCallback(
+    ({
+      isFirst,
+      number,
+      selectedNumber,
+      user,
+    }: {
+      isFirst: boolean;
+      number: number;
+      selectedNumber?: number;
+      user: string;
+    }) => {
+      if (isFirst) {
+        setFirstNumber(number);
+        return;
+      }
+
+      setHistory((prevHistory) => {
+        const lastResult = prevHistory?.at(-1)?.result ?? firstNumber;
+        const historyItem: HistoryItem = {
+          selectedNumber: selectedNumber!,
+          number: lastResult,
+          result: number,
+          user,
+          id: Math.random().toString(16).substring(2, 8),
+        };
+        return [...prevHistory, historyItem];
+      });
+    },
+    [firstNumber]
+  );
+
+  useSocketEvent(socket, "randomNumber", onRandomNumber);
+
   const joinRoom = useCallback((room: Room) => {
       socket.emit("joinRoom", { room: room.id, username: username, roomType: room.type });
       setCurrentRoom(room);
@@ -62,6 +96,16 @@ export const Rooms = () => {
     <Page>
       <RoomsWrapper>
         <RoomChooser rooms={rooms} currentRoom={currentRoom} onRoomClick={startGame} />
+        <GameRoomWrapper>
+          <GameRoom
+            currentRoom={currentRoom}
+            firstNumber={firstNumber}
+            history={history}
+            myTurn={myTurn}
+            setMyTurn={setMyTurn}
+            username={username}
+          />
+        </GameRoomWrapper>
       </RoomsWrapper>
     </Page>
   );

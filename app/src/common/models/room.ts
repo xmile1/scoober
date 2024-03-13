@@ -13,3 +13,7 @@ export interface HistoryItem {
   id: string;
 }
 
+export interface OnReadyResponse {
+  state: boolean;
+  userId: string;
+}
