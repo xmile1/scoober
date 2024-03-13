@@ -12,10 +12,10 @@ const Main = styled.main`
   overflow: hidden;
 `;
 
-export const Page = ({ children }: { children: React.ReactNode }) => {
+export const Page = ({ children, opponentName }: { children: React.ReactNode; opponentName: string }) => {
   return (
     <PageWrapper>
-      <Header />
+      <Header opponentName={opponentName} />
       <Main>
         {children}
       </Main>

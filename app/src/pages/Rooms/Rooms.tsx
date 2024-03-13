@@ -16,6 +16,8 @@ export const Rooms = () => {
   const [history, setHistory] = useState<HistoryItem[]>([]);
   const [firstNumber, setFirstNumber] = useState<number>(0);
   const [currentRoom, setCurrentRoom] = useState<Room>();
+  const [opponentName, setOpponentName] = useState<string>("");
+
 
   useEffect(() => {
     socket.connect();
@@ -76,6 +78,10 @@ export const Rooms = () => {
 
   useSocketEvent(socket, "randomNumber", onRandomNumber);
 
+  useSocketEvent(socket, "opponentName", ({opponentName}: {opponentName: string}) => {
+    setOpponentName(opponentName);
+  });
+
   const joinRoom = useCallback((room: Room) => {
       socket.emit("joinRoom", { room: room.id, username: username, roomType: room.type });
       setCurrentRoom(room);
@@ -94,7 +100,7 @@ export const Rooms = () => {
   );
 
   return (
-    <Page>
+    <Page opponentName={opponentName}>
       <RoomsWrapper>
         <RoomChooser rooms={rooms} currentRoom={currentRoom} onRoomClick={startGame} />
         <GameRoomWrapper>

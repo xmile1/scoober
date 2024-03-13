@@ -11,13 +11,13 @@ const HeaderWrapper = styled.header`
   color: var(--color-alternative-text);
 `;
 
-export const Header = () => {
+export const Header = ({ opponentName }: { opponentName: string }) => {
   return (
     <HeaderWrapper>
       <img src={logo} alt="Company logo" />
       <div>
         <Text as="h3" weight="bold" color="alternative-text" size="l">
-          Playing with
+          Playing with {opponentName}
         </Text>
         <Text color="alternative-text">
           Win the game or win the job
