@@ -6,3 +6,9 @@ export const RoomsWrapper = styled.div`
     background-color: var(--color-background-secondary);
   `;
 
+export const GameRoomWrapper = styled.div`
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  `;
