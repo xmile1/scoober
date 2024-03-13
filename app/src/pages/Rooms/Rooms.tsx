@@ -8,6 +8,7 @@ import { GameOver } from "@/modules/GameOver";
 import { useSocketEvent } from "@/common/hooks";
 import { GameRoomWrapper, RoomsWrapper } from "./Rooms.styles";
 import { HistoryItem, Room } from "@/common/models/room";
+import { useNotification } from "@/modules/Notification";
 
 export const Rooms = () => {
   const [rooms, setRooms] = useState<Room[]>([]);
@@ -18,6 +19,7 @@ export const Rooms = () => {
   const [currentRoom, setCurrentRoom] = useState<Room>();
   const [opponentName, setOpponentName] = useState<string>("");
 
+  const { showNotification } = useNotification();
 
   useEffect(() => {
     socket.connect();
@@ -80,6 +82,9 @@ export const Rooms = () => {
 
   useSocketEvent(socket, "opponentName", ({opponentName}: {opponentName: string}) => {
     setOpponentName(opponentName);
+  });
+  useSocketEvent(socket, "message", ({message}: {message: string}) => {
+    showNotification(message);
   });
 
   const joinRoom = useCallback((room: Room) => {
