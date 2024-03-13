@@ -4,6 +4,7 @@ import { socket } from "@/common/services/api/socket";
 import { RoomChooser } from "@/modules/RoomChooser";
 import { GameRoom } from "@/modules/GameRoom";
 import { useCallback, useEffect, useState } from "react";
+import { GameOver } from "@/modules/GameOver";
 import { useSocketEvent } from "@/common/hooks";
 import { GameRoomWrapper, RoomsWrapper } from "./Rooms.styles";
 import { HistoryItem, Room } from "@/common/models/room";
@@ -97,6 +98,7 @@ export const Rooms = () => {
       <RoomsWrapper>
         <RoomChooser rooms={rooms} currentRoom={currentRoom} onRoomClick={startGame} />
         <GameRoomWrapper>
+          <GameOver onNewGame={() => startGame()} username={username} />
           <GameRoom
             currentRoom={currentRoom}
             firstNumber={firstNumber}
