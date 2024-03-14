@@ -1,5 +1,4 @@
 import { Page } from "@/common/components";
-import { getRooms } from "@/common/services/api/rooms";
 import { socket } from "@/common/services/api/socket";
 import { RoomChooser } from "@/modules/RoomChooser";
 import { GameRoom } from "@/modules/GameRoom";
@@ -9,17 +8,9 @@ import { GameRoomWrapper, RoomsWrapper } from "./Rooms.styles";
 import { Room } from "@/common/models/room";
 import { useNotification } from "@/modules/Notification";
 import { useAppSelector, useAppDispatch, useSocketEvent } from "@/common/hooks";
-import { setRooms, setCurrentRoom } from '@/store/roomsSlice';
+import { setCurrentRoom } from '@/store/roomsSlice';
 import { setUsername, setIsMyTurn, setOpponentName } from '@/store/playerStateSlice';
-import { setFirstNumber, resetHistory, setHistoryItem } from "@/store/historySlice";
-
-
-type RandomNumberPayload = {
-  isFirst: boolean;
-  number: number;
-  selectedNumber: number;
-  user: string;
-}
+import { setFirstNumber, resetHistory } from "@/store/historySlice";
 
 export const Rooms = () => {
   const dispatch = useAppDispatch();
@@ -41,15 +32,6 @@ export const Rooms = () => {
   }, []);
 
   useEffect(() => {
-    async function fetchRooms() {
-      const roomsData = await getRooms();
-      dispatch(setRooms(roomsData));
-    }
-
-    fetchRooms();
-  }, [dispatch]);
-
-  useEffect(() => {
     const login = () => {
       const username = `guest${Math.floor(Math.random() * 10000 + 90000)}`;
       dispatch(setUsername(username));
@@ -57,14 +39,6 @@ export const Rooms = () => {
     };
     login();
   }, [dispatch]);
-
-
-  const onRandomNumber = useCallback((payload : RandomNumberPayload) => {
-    const { isFirst, number, selectedNumber, user } = payload;
-    if (isFirst) return dispatch(setFirstNumber(number));
-
-    dispatch(setHistoryItem({selectedNumber, number, user}));  
- }, [dispatch]);
 
   const onOpponentName = useCallback(({ opponentName }: { opponentName: string }) => {
     dispatch(setOpponentName(opponentName));
@@ -74,7 +48,6 @@ export const Rooms = () => {
     showNotification(message);
   }, [showNotification]);
 
-  useSocketEvent(socket, "randomNumber", onRandomNumber);
   useSocketEvent(socket, "opponentName", onOpponentName);
   useSocketEvent(socket, "message", onMessage);
 

@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen, waitFor } from "@/tests/render";
 import userEvent from "@testing-library/user-event";
 import { GameRoom } from "../GameRoom";
 import { socket } from "@/tests/mocks/socket.io-client.mock";

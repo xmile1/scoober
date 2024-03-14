@@ -8,7 +8,16 @@ import { HistoryItem } from "../components/HistoryItem";
 import { PlayerChoiceButtons } from "../components/PlayerChoiceButtons";
 import { RoomIntroductions } from "../components/RoomIntroductions";
 import { socket } from "@/common/services/api/socket";
-import { useSocketEvent } from "@/common/hooks";
+import { useAppDispatch, useSocketEvent } from "@/common/hooks";
+import { setFirstNumber, setHistoryItem } from "@/store/historySlice";
+
+
+type RandomNumberPayload = {
+  isFirst: boolean;
+  number: number;
+  selectedNumber: number;
+  user: string;
+}
 
 type GameRoomProps = {
   myTurn: boolean;
@@ -28,6 +37,7 @@ export const GameRoom = ({
   setMyTurn,
 }: GameRoomProps) => {
   const endOfHistoryRef = useRef<HTMLDivElement>(null);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     const scrollToBottom = () => {
@@ -55,6 +65,15 @@ export const GameRoom = ({
     [setMyTurn]
   );
 
+  const onRandomNumber = useCallback((payload : RandomNumberPayload) => {
+    const { isFirst, number, selectedNumber, user } = payload;
+    if (isFirst) return dispatch(setFirstNumber(number));
+
+    dispatch(setHistoryItem({selectedNumber, number, user}));  
+ }, [dispatch]);
+
+
+  useSocketEvent(socket, "randomNumber", onRandomNumber);
   useSocketEvent(socket, "onReady", onReady);
   useSocketEvent(socket, "activateYourTurn", onActivateYourTurn);
 

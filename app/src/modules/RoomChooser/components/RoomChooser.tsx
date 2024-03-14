@@ -1,6 +1,10 @@
 import { Text, RoomButton } from "@/common/components";
 import { Room } from "@/common/models/room";
 import styled from "styled-components";
+import { useAppDispatch } from "@/common/hooks";
+import { getRooms } from "@/common/services/api/rooms";
+import { setRooms } from "@/store/roomsSlice";
+import { useEffect } from "react";
 
 const Wrapper = styled.div`
   padding: 16px 16px 16px 24px;
@@ -20,6 +24,17 @@ type RoomChooserProps = {
 };
 
 export const RoomChooser = ({ rooms, currentRoom, onRoomClick }: RoomChooserProps) => {
+    const dispatch = useAppDispatch();
+
+    useEffect(() => {
+      async function fetchRooms() {
+        const roomsData = await getRooms();
+        dispatch(setRooms(roomsData));
+      }
+
+      fetchRooms();
+    }, [dispatch]);
+
   const isActiveRoom = (room: Room) => room.id === currentRoom?.id;
 
   return (
