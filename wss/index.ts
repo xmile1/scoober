@@ -6,7 +6,9 @@ import APIService from "./api.service";
 
 const port = 8082;
 const server = http.createServer(express);
-const io = SocketIO(server);
+const io = SocketIO(server, {
+  path: '/api/socket.io'
+});
 const apiService = new APIService();
 
 enum GameState {
