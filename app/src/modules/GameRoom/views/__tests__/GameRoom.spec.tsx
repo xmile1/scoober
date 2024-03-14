@@ -1,8 +1,9 @@
 import { describe, expect, it, vi } from "vitest";
-import { render, screen, waitFor } from "@/tests/render";
 import userEvent from "@testing-library/user-event";
-import { GameRoom } from "../GameRoom";
+import { render, screen, waitFor } from "@/tests/render";
 import { socket } from "@/tests/mocks/socket.io-client.mock";
+
+import { GameRoom } from "../GameRoom";
 
 const reusableProps = {
   history: [],

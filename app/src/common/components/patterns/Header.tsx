@@ -1,5 +1,6 @@
-import logo from "@/assets/jet-logo.svg";
 import styled from "styled-components";
+import logo from "@/assets/jet-logo.svg";
+
 import { Text } from "@/common/components";
 
 const HeaderWrapper = styled.header`

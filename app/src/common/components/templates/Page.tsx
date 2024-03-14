@@ -1,5 +1,5 @@
-import { Header, Footer } from "@/common/components";
 import styled from "styled-components";
+import { Header, Footer } from "@/common/components";
 
 const PageWrapper = styled.div`
   display: grid;

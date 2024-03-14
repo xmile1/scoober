@@ -1,9 +1,10 @@
+import { Provider } from 'react-redux';
 import "./reset.css";
 import "./theme.css";
+
+import { setupStore } from './store';
 import { Rooms } from "@/pages/Rooms/Rooms";
 import { NotificationProvider } from "./modules/Notification";
-import { Provider } from 'react-redux';
-import { setupStore } from './store';
 
 const store = setupStore();
 

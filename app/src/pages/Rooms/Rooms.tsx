@@ -1,16 +1,20 @@
-import { Page } from "@/common/components";
+import { useCallback, useEffect } from "react";
 import { socket } from "@/common/services/api/socket";
+import { useAppSelector, useAppDispatch, useSocketEvent } from "@/common/hooks";
+
+import { Page } from "@/common/components";
 import { RoomChooser } from "@/modules/RoomChooser";
 import { GameRoom } from "@/modules/GameRoom";
-import { useCallback, useEffect } from "react";
 import { GameOver } from "@/modules/GameOver";
-import { GameRoomWrapper, RoomsWrapper } from "./Rooms.styles";
+
 import { Room } from "@/common/models/room";
 import { useNotification } from "@/modules/Notification";
-import { useAppSelector, useAppDispatch, useSocketEvent } from "@/common/hooks";
+
 import { setCurrentRoom } from '@/store/roomsSlice';
 import { setUsername, setIsMyTurn, setOpponentName } from '@/store/playerStateSlice';
 import { setFirstNumber, resetHistory } from "@/store/historySlice";
+
+import { GameRoomWrapper, RoomsWrapper } from "./Rooms.styles";
 
 export const Rooms = () => {
   const dispatch = useAppDispatch();

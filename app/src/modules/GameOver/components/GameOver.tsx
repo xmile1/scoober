@@ -1,10 +1,13 @@
 import { useCallback, useState } from "react";
-import { Button, Modal, Text } from "@/common/components";
-import loseIcon from "@/assets/icons/lose.svg";
-import winIcon from "@/assets/icons/win.svg";
 import styled from "styled-components";
+
 import { useSocketEvent } from "@/common/hooks";
 import { socket } from "@/common/services/api/socket";
+
+import winIcon from "@/assets/icons/win.svg";
+import loseIcon from "@/assets/icons/lose.svg";
+
+import { Button, Modal, Text } from "@/common/components";
 
 const GameOverMessage = styled(Text)`
   margin: 16px 0;

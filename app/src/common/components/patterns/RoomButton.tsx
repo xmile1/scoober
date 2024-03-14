@@ -1,5 +1,5 @@
-import arrowRightIcon from "@/assets/icons/arrow-right.svg";
 import styled from "styled-components";
+import arrowRightIcon from "@/assets/icons/arrow-right.svg";
 import { Button } from "../elements/Button";
 
 interface WrapperProps {

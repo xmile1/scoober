@@ -1,7 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { act, render, screen } from "@/tests/render";
-import { Rooms } from "../Rooms";
 import { triggerSocketEvent } from "@/tests/mocks/socket.io-client.mock";
+
+import { Rooms } from "../Rooms";
 
 describe("Rooms", () => {
     it("displays the history upon receiving a 'randomNumber' event", async () => {

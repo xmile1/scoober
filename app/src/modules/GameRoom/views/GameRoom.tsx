@@ -1,16 +1,19 @@
+import { useCallback, useEffect, useRef } from "react";
+import { HistoryItem as HistoryItemModel, OnReadyResponse, Room } from "@/common/models/room";
+
+import { socket } from "@/common/services/api/socket";
+import { useAppDispatch, useSocketEvent } from "@/common/hooks";
+
+import { HistoryItem } from "../components/HistoryItem";
+import { PlayerChoiceButtons } from "../components/PlayerChoiceButtons";
+import { RoomIntroductions } from "../components/RoomIntroductions";
+
+import { setFirstNumber, setHistoryItem } from "@/store/historySlice";
+
 import {
   GameRoomLayout,
   WaitingForOpponent,
 } from "../styles/GameRoom.styles";
-import { useCallback, useEffect, useRef } from "react";
-import { HistoryItem as HistoryItemModel, OnReadyResponse, Room } from "@/common/models/room";
-import { HistoryItem } from "../components/HistoryItem";
-import { PlayerChoiceButtons } from "../components/PlayerChoiceButtons";
-import { RoomIntroductions } from "../components/RoomIntroductions";
-import { socket } from "@/common/services/api/socket";
-import { useAppDispatch, useSocketEvent } from "@/common/hooks";
-import { setFirstNumber, setHistoryItem } from "@/store/historySlice";
-
 
 type RandomNumberPayload = {
   isFirst: boolean;

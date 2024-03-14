@@ -1,9 +1,12 @@
 import { useEffect, useRef } from "react";
-import { Text } from "@/common/components";
-import { HistoryItemLayout, SelectedNumber, TextRectangle } from "../styles/HistoryItem.styles";
+
+import { HistoryItem as HistoryItemModel } from "@/common/models/room";
 import myAvatarIcon from "@/assets/icons/my-avatar.svg";
 import opponentAvatarIcon from "@/assets/icons/jet-avatar.svg";
-import { HistoryItem as HistoryItemModel } from "@/common/models/room";
+
+import { Text } from "@/common/components";
+
+import { HistoryItemLayout, SelectedNumber, TextRectangle } from "../styles/HistoryItem.styles";
 
 const formatSelectedNumber = (selectedNumber: number) => {
   return selectedNumber > 0 ? `+${selectedNumber}` : selectedNumber.toString();
