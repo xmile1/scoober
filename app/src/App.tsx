@@ -2,12 +2,18 @@ import "./reset.css";
 import "./theme.css";
 import { Rooms } from "@/pages/Rooms/Rooms";
 import { NotificationProvider } from "./modules/Notification";
+import { Provider } from 'react-redux';
+import { setupStore } from './store';
+
+const store = setupStore();
 
 function App() {
   return (
-    <NotificationProvider>
-      <Rooms />
-    </NotificationProvider>
+    <Provider store={store}>
+      <NotificationProvider>
+        <Rooms />
+      </NotificationProvider>
+    </Provider>
   );
 }
 
