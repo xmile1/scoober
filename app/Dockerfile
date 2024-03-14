@@ -1,6 +1,6 @@
-FROM node:18-alpine AS build
+FROM node:18-alpine AS builder
 
-WORKDIR /app
+WORKDIR /code/
 
 COPY package.json yarn.lock ./
 
@@ -11,13 +11,5 @@ COPY . .
 RUN yarn build
 
 
-FROM nginx:alpine
-
-COPY --from=build /app/dist /usr/share/nginx/html
-
-EXPOSE 80
-
-CMD ["nginx", "-g", "daemon off;"]
-
-
-
+FROM devforth/spa-to-http:latest
+COPY --from=builder /code/dist/ . 
