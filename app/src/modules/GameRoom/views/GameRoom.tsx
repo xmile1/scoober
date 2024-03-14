@@ -15,7 +15,7 @@ type GameRoomProps = {
   history: HistoryItemModel[];
   username: string;
   firstNumber?: number;
-  currentRoom?: Room;
+  currentRoom: Room | null;
   setMyTurn: (isMyTurn: boolean) => void;
 };
 

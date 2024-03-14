@@ -3,23 +3,35 @@ import { getRooms } from "@/common/services/api/rooms";
 import { socket } from "@/common/services/api/socket";
 import { RoomChooser } from "@/modules/RoomChooser";
 import { GameRoom } from "@/modules/GameRoom";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect } from "react";
 import { GameOver } from "@/modules/GameOver";
-import { useSocketEvent } from "@/common/hooks";
 import { GameRoomWrapper, RoomsWrapper } from "./Rooms.styles";
-import { HistoryItem, Room } from "@/common/models/room";
+import { Room } from "@/common/models/room";
 import { useNotification } from "@/modules/Notification";
+import { useAppSelector, useAppDispatch, useSocketEvent } from "@/common/hooks";
+import { setRooms, setCurrentRoom } from '@/store/roomsSlice';
+import { setUsername, setIsMyTurn, setOpponentName } from '@/store/playerStateSlice';
+import { setFirstNumber, resetHistory, setHistoryItem } from "@/store/historySlice";
+
+
+type RandomNumberPayload = {
+  isFirst: boolean;
+  number: number;
+  selectedNumber: number;
+  user: string;
+}
 
 export const Rooms = () => {
-  const [rooms, setRooms] = useState<Room[]>([]);
-  const [username, setUsername] = useState<string>("");
-  const [myTurn, setMyTurn] = useState<boolean>(false);
-  const [history, setHistory] = useState<HistoryItem[]>([]);
-  const [firstNumber, setFirstNumber] = useState<number>(0);
-  const [currentRoom, setCurrentRoom] = useState<Room>();
-  const [opponentName, setOpponentName] = useState<string>("");
-
+  const dispatch = useAppDispatch();
   const { showNotification } = useNotification();
+
+  const rooms = useAppSelector((state) => state.rooms.rooms);
+  const currentRoom = useAppSelector((state) => state.rooms.currentRoom);
+  const username = useAppSelector((state) => state.playerState.username);
+  const myTurn = useAppSelector((state) => state.playerState.isMyTurn);
+  const opponentName = useAppSelector((state) => state.playerState.opponentName);
+  const history = useAppSelector((state) => state.history.history);
+  const firstNumber = useAppSelector((state) => state.history.firstNumber);
 
   useEffect(() => {
     socket.connect();
@@ -31,77 +43,55 @@ export const Rooms = () => {
   useEffect(() => {
     async function fetchRooms() {
       const roomsData = await getRooms();
-      setRooms(roomsData);
+      dispatch(setRooms(roomsData));
     }
 
     fetchRooms();
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     const login = () => {
       const username = `guest${Math.floor(Math.random() * 10000 + 90000)}`;
-      setUsername(username);
+      dispatch(setUsername(username));
       socket.emit("login", { username });
     };
     login();
-  }, []);
+  }, [dispatch]);
 
-  const onRandomNumber = useCallback(
-    ({
-      isFirst,
-      number,
-      selectedNumber,
-      user,
-    }: {
-      isFirst: boolean;
-      number: number;
-      selectedNumber?: number;
-      user: string;
-    }) => {
-      if (isFirst) {
-        setFirstNumber(number);
-        return;
-      }
 
-      setHistory((prevHistory) => {
-        const lastResult = prevHistory?.at(-1)?.result ?? firstNumber;
-        const historyItem: HistoryItem = {
-          selectedNumber: selectedNumber!,
-          number: lastResult,
-          result: number,
-          user,
-          id: Math.random().toString(16).substring(2, 8),
-        };
-        return [...prevHistory, historyItem];
-      });
-    },
-    [firstNumber]
-  );
+  const onRandomNumber = useCallback((payload : RandomNumberPayload) => {
+    const { isFirst, number, selectedNumber, user } = payload;
+    if (isFirst) return dispatch(setFirstNumber(number));
+
+    dispatch(setHistoryItem({selectedNumber, number, user}));  
+ }, [dispatch]);
+
+  const onOpponentName = useCallback(({ opponentName }: { opponentName: string }) => {
+    dispatch(setOpponentName(opponentName));
+  }, [dispatch]);
+
+  const onMessage = useCallback(({ message }: { message: string }) => {
+    showNotification(message);
+  }, [showNotification]);
 
   useSocketEvent(socket, "randomNumber", onRandomNumber);
-
-  useSocketEvent(socket, "opponentName", ({opponentName}: {opponentName: string}) => {
-    setOpponentName(opponentName);
-  });
-  useSocketEvent(socket, "message", ({message}: {message: string}) => {
-    showNotification(message);
-  });
+  useSocketEvent(socket, "opponentName", onOpponentName);
+  useSocketEvent(socket, "message", onMessage);
 
   const joinRoom = useCallback((room: Room) => {
       socket.emit("joinRoom", { room: room.id, username: username, roomType: room.type });
-      setCurrentRoom(room);
+      dispatch(setCurrentRoom(room));
     },
-    [username]
+    [username, dispatch]
   );
 
-  const startGame = useCallback(
-    (room?: Room) => {
-      setHistory([]);
-      setFirstNumber(0);
-      setMyTurn(false);
+  const startGame = useCallback((room?: Room) => {
+      dispatch(resetHistory());
+      dispatch(setFirstNumber(0));
+      dispatch(setIsMyTurn(false));
       joinRoom(room ?? (currentRoom as Room));
     },
-    [currentRoom, joinRoom]
+    [currentRoom, joinRoom, dispatch]
   );
 
   return (
@@ -115,7 +105,7 @@ export const Rooms = () => {
             firstNumber={firstNumber}
             history={history}
             myTurn={myTurn}
-            setMyTurn={setMyTurn}
+            setMyTurn={(isMyTurn: boolean) => dispatch(setIsMyTurn(isMyTurn))}
             username={username}
           />
         </GameRoomWrapper>
@@ -123,3 +113,5 @@ export const Rooms = () => {
     </Page>
   );
 };
+
+
